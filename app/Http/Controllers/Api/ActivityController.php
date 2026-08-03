@@ -157,8 +157,8 @@ class ActivityController extends Controller
                 'repair_data.stock_part_name' => 'nullable|string',
                 'repair_data.stock_part_quantity' => 'nullable|integer|min:1',
                 'spareparts' => 'nullable|array',
-                'spareparts.*.id' => 'required_with:spareparts|exists:spareparts,id',
-                'spareparts.*.quantity' => 'required_with:spareparts|integer|min:1',
+                'spareparts.*.id' => 'nullable|exists:spareparts,id',
+                'spareparts.*.quantity' => 'nullable|integer|min:1',
             ]);
 
             $statusChanged = isset($validated['status']) && $validated['status'] !== $activity->status;
@@ -168,7 +168,8 @@ class ActivityController extends Controller
             }
 
             $repairData = $validated['repair_data'] ?? null;
-            $spareparts = $validated['spareparts'] ?? [];
+            $rawSpareparts = $validated['spareparts'] ?? [];
+            $spareparts = array_filter($rawSpareparts, fn($item) => !empty($item['id']));
 
             unset($validated['repair_data'], $validated['spareparts']);
 

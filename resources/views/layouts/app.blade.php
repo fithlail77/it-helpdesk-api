@@ -83,9 +83,6 @@
             <a href="{{ route('activities.index') }}" class="nav-link {{ request()->routeIs('activities.*') ? 'active' : '' }}">
                 <i class="bi bi-clipboard-check"></i> Semua Tiket
             </a>
-            <a href="{{ route('activities.create') }}" class="nav-link {{ request()->routeIs('activities.create') ? 'active' : '' }}">
-                <i class="bi bi-plus-circle"></i> Buat Tiket
-            </a>
         </nav>
     </div>
 

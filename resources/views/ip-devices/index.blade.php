@@ -19,6 +19,7 @@
                         <th>Spesifikasi</th>
                         <th>IP Address</th>
                         <th>Lokasi</th>
+                        <th>Keterangan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -31,6 +32,7 @@
                         <td><small class="text-muted">{{ $d->specifications ?: '-' }}</small></td>
                         <td><code class="bg-light px-2 py-1 rounded" style="font-size:0.82rem">{{ $d->ip_address }}</code></td>
                         <td>{{ $d->location }}</td>
+                        <td><small class="text-muted">{{ $d->description ?: '-' }}</small></td>
                         <td>
                             <div class="d-flex gap-1">
                                 <a href="{{ route('ip-devices.edit', $d) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>

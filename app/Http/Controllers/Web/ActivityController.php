@@ -138,9 +138,6 @@ class ActivityController extends Controller
         $validated = $request->validate([
             'status' => 'required|string|in:pending,in_progress,completed,cancelled',
             'repair_description' => 'nullable|string',
-            'spareparts' => 'nullable|array',
-            'spareparts.*.id' => 'required_with:spareparts|exists:spareparts,id',
-            'spareparts.*.quantity' => 'required_with:spareparts|integer|min:1',
         ]);
 
         $oldStatus = $activity->status;
@@ -163,7 +160,6 @@ class ActivityController extends Controller
             $logNote = $validated['repair_description'];
         }
 
-        // Create one log entry for status change + repair description
         $log = ActivityLog::create([
             'activity_id' => $activity->id,
             'user_id' => session('web_user.id'),
@@ -172,12 +168,12 @@ class ActivityController extends Controller
             'repair_data' => $repairData,
         ]);
 
-        // Handle first sparepart on the log itself
-        $spareparts = $validated['spareparts'] ?? [];
+        // Handle spareparts - filter out empty entries
+        $rawSpareparts = $request->input('spareparts', []);
+        $spareparts = array_filter($rawSpareparts, fn($item) => !empty($item['id']));
+
         $first = true;
         foreach ($spareparts as $item) {
-            if (empty($item['id'])) continue;
-
             $sparepart = Sparepart::find($item['id']);
             $qty = $item['quantity'] ?? 1;
 

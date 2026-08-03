@@ -36,6 +36,11 @@
                         <input type="text" name="location" class="form-control @error('location') is-invalid @enderror" value="{{ old('location') }}" placeholder="contoh: Server Room Lt.3, Kantor Pusat" required>
                         @error('location') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Keterangan</label>
+                        <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="2" placeholder="contoh: Digunakan untuk server aplikasi internal">{{ old('description') }}</textarea>
+                        @error('description') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    </div>
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary btn-modern"><i class="bi bi-check-lg me-1"></i>Simpan</button>
                         <a href="{{ route('ip-devices.index') }}" class="btn btn-outline-secondary btn-modern">Batal</a>

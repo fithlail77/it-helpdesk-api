@@ -9,5 +9,5 @@ class IpDevice extends Model
 {
     use HasUuids;
 
-    protected $fillable = ['name', 'brand', 'specifications', 'ip_address', 'location'];
+    protected $fillable = ['name', 'brand', 'specifications', 'ip_address', 'location', 'description'];
 }

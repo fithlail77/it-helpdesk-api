@@ -45,6 +45,7 @@ class IpDeviceController extends Controller
             'specifications' => 'nullable|string|max:500',
             'ip_address' => 'required|string|max:45|unique:ip_devices,ip_address',
             'location' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
         ]);
 
         IpDevice::create($validated);
@@ -65,6 +66,7 @@ class IpDeviceController extends Controller
             'specifications' => 'nullable|string|max:500',
             'ip_address' => 'required|string|max:45|unique:ip_devices,ip_address,' . $ipDevice->id,
             'location' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
         ]);
 
         $ipDevice->update($validated);
