@@ -42,12 +42,29 @@
                             <label class="form-label fw-medium">Department</label>
                             <select name="department" class="form-select">
                                 <option value="IT" {{ old('department')==='IT' ? 'selected' : '' }}>IT</option>
-                                <option value="Finance" {{ old('department')==='Finance' ? 'selected' : '' }}>Finance</option>
+                                <option value="FA" {{ old('department')==='Finance & Accounting' ? 'selected' : '' }}>Finance & Accounting</option>
                                 <option value="HR" {{ old('department')==='HR' ? 'selected' : '' }}>HR</option>
-                                <option value="Marketing" {{ old('department')==='Marketing' ? 'selected' : '' }}>Marketing</option>
-                                <option value="Operations" {{ old('department')==='Operations' ? 'selected' : '' }}>Operations</option>
-                                <option value="Sales" {{ old('department')==='Sales' ? 'selected' : '' }}>Sales</option>
-                                <option value="Engineering" {{ old('department')==='Engineering' ? 'selected' : '' }}>Engineering</option>
+                                <option value="Umum" {{ old('department')==='Umum' ? 'selected' : '' }}>Umum</option>
+                                <option value="Procurement" {{ old('department')==='Procurment' ? 'selected' : '' }}>Procurment</option>
+                                <option value="Legal" {{ old('department')==='Legal' ? 'selected' : '' }}>Legal</option>
+                                <option value="EHSS" {{ old('department')==='EHSS' ? 'selected' : '' }}>EHSS</option>
+                                <option value="Infra" {{ old('department')==='Infra' ? 'selected' : '' }}>Infra</option>
+                                <option value="Rnd-QC" {{ old('department')==='RnD-QC' ? 'selected' : '' }}>RnD-QC</option>
+                                <option value="Planning" {{ old('department')==='Planning' ? 'selected' : '' }}>Planning</option>
+                                <option value="DC" {{ old('department')==='Data Center' ? 'selected' : '' }}>Data Center</option>
+                                <option value="GIS" {{ old('department')==='GIS' ? 'selected' : '' }}>GIS</option>
+                                <option value="Humas" {{ old('department')==='Humas' ? 'selected' : '' }}>Humas</option>
+                                <option value="Internal Audit" {{ old('department')==='Internal Audit' ? 'selected' : '' }}>Internal Audit</option>
+                                <option value="CPO MILL" {{ old('department')==='CPO MILL' ? 'selected' : '' }}>CPO MILL</option>
+                                <option value="Workshop" {{ old('department')==='Workshop' ? 'selected' : '' }}>Workshop</option>
+                                <option value="Logistic" {{ old('department')==='Logistic' ? 'selected' : '' }}>Logistic</option>
+                                <option value="Sarana" {{ old('department')==='Sarana' ? 'selected' : '' }}>Sarana</option>
+                                <option value="TC" {{ old('department')==='TC' ? 'selected' : '' }}>TC</option>
+                                <option value="Melamor" {{ old('department')==='Melamor' ? 'selected' : '' }}>Melamor</option>
+                                <option value="Sedadung" {{ old('department')==='Sedadung' ? 'selected' : '' }}>Sedadung</option>
+                                <option value="Tugang" {{ old('department')==='Tugang' ? 'selected' : '' }}>Tugang</option>
+                                <option value="Mulau" {{ old('department')==='Mulau' ? 'selected' : '' }}>Mulau</option>
+                                <option value="Ngaring" {{ old('department')==='Ngaring' ? 'selected' : '' }}>Ngaring</option>
                                 <option value="Lainnya" {{ old('department')==='Lainnya' ? 'selected' : '' }}>Lainnya</option>
                             </select>
                         </div>
@@ -114,9 +131,9 @@
 @push('scripts')
 <script>
 const subCategories = {
-    hardware: ['Laptop','Desktop','Printer','Scanner','Monitor','Keyboard','Mouse','UPS','Server','Lainnya'],
-    software: ['Operating System','Aplikasi','Driver','Antivirus','Database','Lainnya'],
-    network: ['Router','Switch','Access Point','Kabel LAN','Server','Lainnya'],
+    hardware: ['Laptop','Desktop','Printer','Scanner','Monitor','Keyboard','Mouse','UPS','Server','Smartphone','CCTV','VOIP','Radio Rig','HT','Proyektor','Lainnya'],
+    software: ['Operating System','Hashmicro','Driver','Antivirus','Database','Cartrack','Innovergy','Dabeoo','Sunfish','Lainnya'],
+    network: ['Router','Switch','Access Point','Kabel LAN','Server','Fiber Optic','IP Radio','Lainnya'],
 };
 const deviceFields = ['hardware','network'];
 
