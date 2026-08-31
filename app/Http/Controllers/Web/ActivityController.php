@@ -141,6 +141,7 @@ class ActivityController extends Controller
         $categoryMap = [
             'Laptop' => 'Laptop',
             'Desktop' => 'PC Desktop',
+            'Printer' => 'Printer'
         ];
 
         if (!isset($categoryMap[$subcategory])) {

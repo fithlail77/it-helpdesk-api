@@ -138,7 +138,7 @@ const subCategories = {
     network: ['Router','Switch','Access Point','Kabel LAN','Server','Fiber Optic','IP Radio','Lainnya'],
 };
 const deviceFields = ['hardware','network'];
-const assetSubCategories = ['Laptop','Desktop'];
+const assetSubCategories = ['Laptop','Desktop','Printer','Scanner','Monitor','Proyektor','CCTV'];
 let assetDataCache = [];
 
 function updateSubCategory() {
