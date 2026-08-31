@@ -37,4 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [ProfileController::class, 'show']);
     Route::put('/profile', [ProfileController::class, 'update']);
     Route::put('/profile/password', [ProfileController::class, 'changePassword']);
+
+    // Assets
+    Route::get('/assets/search', [\App\Http\Controllers\Api\ActivityController::class, 'searchAssets'])->name('api.assets.search');
 });

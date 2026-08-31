@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\ActivityLog;
+use App\Models\Asset;
 use App\Models\Sparepart;
 use App\Models\Team;
 use App\Models\User;
@@ -131,6 +132,27 @@ class ActivityController extends Controller
     {
         $activity->delete();
         return redirect()->route('activities.index')->with('success', 'Tiket berhasil dihapus.');
+    }
+
+    public function searchAssets(Request $request)
+    {
+        $subcategory = $request->input('subcategory', '');
+
+        $categoryMap = [
+            'Laptop' => 'Laptop',
+            'Desktop' => 'PC Desktop',
+        ];
+
+        if (!isset($categoryMap[$subcategory])) {
+            return response()->json([]);
+        }
+
+        $assets = Asset::where('category', $categoryMap[$subcategory])
+            ->select('asset_number', 'asset_name')
+            ->orderBy('asset_name')
+            ->get();
+
+        return response()->json($assets);
     }
 
     public function updateStatus(Request $request, Activity $activity)

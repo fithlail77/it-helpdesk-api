@@ -68,13 +68,15 @@
                                 <option value="Lainnya" {{ old('department')==='Lainnya' ? 'selected' : '' }}>Lainnya</option>
                             </select>
                         </div>
-                        <div class="col-md-4" id="deviceTypeGroup" style="display:none">
-                            <label class="form-label fw-medium">Jenis Perangkat <span class="text-danger">*</span></label>
-                            <input type="text" name="device_type" class="form-control" value="{{ old('device_type') }}" placeholder="Contoh: ThinkPad T480">
-                        </div>
                         <div class="col-md-4" id="barcodeGroup" style="display:none">
                             <label class="form-label fw-medium">No Barcode <span class="text-danger">*</span></label>
-                            <input type="text" name="barcode_number" class="form-control" value="{{ old('barcode_number') }}" placeholder="Nomor barcode">
+                            <select name="barcode_number" id="barcodeSelect" class="form-select">
+                                <option value="">-- Pilih No Barcode --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4" id="deviceTypeGroup" style="display:none">
+                            <label class="form-label fw-medium">Jenis Perangkat <span class="text-danger">*</span></label>
+                            <input type="text" name="device_type" id="deviceTypeInput" class="form-control" value="{{ old('device_type') }}" placeholder="Otomatis terisi" readonly>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label fw-medium">Prioritas <span class="text-danger">*</span></label>
@@ -136,13 +138,13 @@ const subCategories = {
     network: ['Router','Switch','Access Point','Kabel LAN','Server','Fiber Optic','IP Radio','Lainnya'],
 };
 const deviceFields = ['hardware','network'];
+const assetSubCategories = ['Laptop','Desktop'];
+let assetDataCache = [];
 
 function updateSubCategory() {
     const cat = document.getElementById('categorySelect').value;
     const subSel = document.getElementById('subCategorySelect');
     const subGrp = document.getElementById('subCategoryGroup');
-    const devGrp = document.getElementById('deviceTypeGroup');
-    const bcGrp = document.getElementById('barcodeGroup');
 
     subSel.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
     if (subCategories[cat]) {
@@ -165,7 +167,49 @@ function toggleDeviceFields() {
     const show = deviceFields.includes(cat) && sub !== '';
     document.getElementById('deviceTypeGroup').style.display = show ? '' : 'none';
     document.getElementById('barcodeGroup').style.display = show ? '' : 'none';
+
+    if (show && assetSubCategories.includes(sub)) {
+        loadAssets(sub);
+    } else {
+        clearAssetFields();
+    }
 }
+
+function loadAssets(subcategory) {
+    const barcodeSel = document.getElementById('barcodeSelect');
+    const deviceInput = document.getElementById('deviceTypeInput');
+
+    barcodeSel.innerHTML = '<option value="">Memuat...</option>';
+    deviceInput.value = '';
+
+    fetch('{{ route("assets.search") }}?subcategory=' + encodeURIComponent(subcategory))
+        .then(res => res.json())
+        .then(assets => {
+            assetDataCache = assets;
+            barcodeSel.innerHTML = '<option value="">-- Pilih No Barcode --</option>';
+            assets.forEach(a => {
+                const opt = document.createElement('option');
+                opt.value = a.asset_number;
+                opt.text = a.asset_number;
+                opt.dataset.name = a.asset_name;
+                barcodeSel.appendChild(opt);
+            });
+        })
+        .catch(() => {
+            barcodeSel.innerHTML = '<option value="">-- Gagal memuat --</option>';
+        });
+}
+
+function clearAssetFields() {
+    document.getElementById('barcodeSelect').innerHTML = '<option value="">-- Pilih No Barcode --</option>';
+    document.getElementById('deviceTypeInput').value = '';
+    assetDataCache = [];
+}
+
+document.getElementById('barcodeSelect').addEventListener('change', function() {
+    const selected = this.options[this.selectedIndex];
+    document.getElementById('deviceTypeInput').value = selected.dataset.name || '';
+});
 
 document.getElementById('categorySelect').addEventListener('change', updateSubCategory);
 document.getElementById('subCategorySelect').addEventListener('change', toggleDeviceFields);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\ActivityLog;
+use App\Models\Asset;
 use App\Models\Sparepart;
 use Illuminate\Http\Request;
 
@@ -279,6 +280,43 @@ class ActivityController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat menghapus aktivitas',
+            ], 500);
+        }
+    }
+
+    public function searchAssets(Request $request)
+    {
+        try {
+            $subcategory = $request->input('subcategory', '');
+
+            $categoryMap = [
+                'Laptop' => 'laptop',
+                'Desktop' => 'PC Desktop',
+            ];
+
+            if (!isset($categoryMap[$subcategory])) {
+                return response()->json([
+                    'success' => true,
+                    'data' => [],
+                    'message' => 'Sub kategori tidak valid',
+                ]);
+            }
+
+            $assets = Asset::where('category', $categoryMap[$subcategory])
+                ->select('asset_number', 'asset_name')
+                ->orderBy('asset_name')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $assets,
+                'message' => 'Daftar aset berhasil diambil',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat mengambil data aset',
+                'debug' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }

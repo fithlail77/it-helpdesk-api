@@ -99,6 +99,21 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
+        'assetdbgum' => [
+            'driver' => 'pgsql',
+            'url' => env('ASSET_DB_URL'),
+            'host' => env('ASSET_DB_HOST', '127.0.0.1'),
+            'port' => env('ASSET_DB_PORT', '5432'),
+            'database' => env('ASSET_DB_DATABASE', 'assetdbgum'),
+            'username' => env('ASSET_DB_USERNAME', 'postgres'),
+            'password' => env('ASSET_DB_PASSWORD', ''),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),

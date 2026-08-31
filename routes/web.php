@@ -34,4 +34,7 @@ Route::middleware('web.auth')->group(function () {
 
     // IP Devices
     Route::resource('ip-devices', IpDeviceController::class)->except(['show']);
+
+    // Assets lookup
+    Route::get('/assets/search', [ActivityController::class, 'searchAssets'])->name('assets.search');
 });
