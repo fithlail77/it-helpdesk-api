@@ -102,7 +102,7 @@ return [
         'assetdbgum' => [
             'driver' => 'pgsql',
             'url' => env('ASSET_DB_URL'),
-            'host' => env('ASSET_DB_HOST', '127.0.0.1'),
+            'host' => env('ASSET_DB_HOST', '10.100.7.5'),
             'port' => env('ASSET_DB_PORT', '5432'),
             'database' => env('ASSET_DB_DATABASE', 'assetdbgum'),
             'username' => env('ASSET_DB_USERNAME', 'postgres'),
