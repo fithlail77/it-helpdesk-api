@@ -65,3 +65,24 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    $('.datatables').DataTable().destroy();
+    $('.datatables').DataTable({
+        order: [[6, 'desc']],
+        pageLength: 10,
+        lengthChange: false,
+        language: {
+            search: "Cari:",
+            info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+            infoEmpty: "Tidak ada data",
+            infoFiltered: "(disaring dari _MAX_ total data)",
+            zeroRecords: "Tidak ada data yang cocok",
+            paginate: { previous: "&laquo;", next: "&raquo;" }
+        }
+    });
+});
+</script>
+@endpush

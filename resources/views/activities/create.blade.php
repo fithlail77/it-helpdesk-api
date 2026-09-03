@@ -180,39 +180,71 @@ function loadAssets(subcategory) {
     const deviceInput = document.getElementById('deviceTypeInput');
 
     barcodeSel.innerHTML = '<option value="">Memuat...</option>';
+    $(barcodeSel).val(null).trigger('change.select2');
     deviceInput.value = '';
 
     fetch('{{ route("assets.search") }}?subcategory=' + encodeURIComponent(subcategory))
         .then(res => res.json())
         .then(assets => {
             assetDataCache = assets;
-            barcodeSel.innerHTML = '<option value="">-- Pilih No Barcode --</option>';
-            assets.forEach(a => {
-                const opt = document.createElement('option');
-                opt.value = a.asset_number;
-                opt.text = a.asset_number;
-                opt.dataset.name = a.asset_name;
-                barcodeSel.appendChild(opt);
-            });
+            renderBarcodeOptions(assets);
         })
         .catch(() => {
             barcodeSel.innerHTML = '<option value="">-- Gagal memuat --</option>';
+            $(barcodeSel).val(null).trigger('change.select2');
         });
 }
 
 function clearAssetFields() {
-    document.getElementById('barcodeSelect').innerHTML = '<option value="">-- Pilih No Barcode --</option>';
+    const barcodeSel = document.getElementById('barcodeSelect');
+    barcodeSel.innerHTML = '<option value="">-- Pilih No Barcode --</option>';
+    $(barcodeSel).val(null).trigger('change').trigger('change.select2');
     document.getElementById('deviceTypeInput').value = '';
     assetDataCache = [];
 }
 
-document.getElementById('barcodeSelect').addEventListener('change', function() {
-    const selected = this.options[this.selectedIndex];
-    document.getElementById('deviceTypeInput').value = selected.dataset.name || '';
-});
+function renderBarcodeOptions(assets) {
+    const barcodeSel = document.getElementById('barcodeSelect');
+    const currentVal = $(barcodeSel).val();
+    barcodeSel.innerHTML = '<option value="">-- Pilih No Barcode --</option>';
+    assets.forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.asset_number;
+        opt.text = a.asset_number;
+        opt.dataset.name = a.asset_name;
+        barcodeSel.appendChild(opt);
+    });
+    if (currentVal) {
+        $(barcodeSel).val(currentVal).trigger('change');
+    }
+    $(barcodeSel).trigger('change.select2');
+}
 
 document.getElementById('categorySelect').addEventListener('change', updateSubCategory);
 document.getElementById('subCategorySelect').addEventListener('change', toggleDeviceFields);
-updateSubCategory();
+
+$(document).ready(function() {
+    $('#barcodeSelect').select2({
+        theme: 'bootstrap-5',
+        width: '100%',
+        placeholder: '-- Pilih No Barcode --',
+        allowClear: true,
+        language: {
+            noResults: function() { return 'Tidak ditemukan'; },
+            searching: function() { return 'Mencari...'; }
+        }
+    });
+
+    $('#barcodeSelect').on('select2:select', function(e) {
+        const asset = assetDataCache.find(a => a.asset_number === e.params.data.id);
+        document.getElementById('deviceTypeInput').value = asset ? asset.asset_name : '';
+    });
+
+    $('#barcodeSelect').on('select2:clear', function() {
+        document.getElementById('deviceTypeInput').value = '';
+    });
+
+    updateSubCategory();
+});
 </script>
 @endpush
