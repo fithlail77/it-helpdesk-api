@@ -46,7 +46,7 @@
                             @endphp
                             <span class="badge bg-{{ $pc }} bg-opacity-10 text-{{ $pc }} badge-status">{{ $pl }}</span>
                         </td>
-                        <td class="text-muted" style="font-size:0.82rem">{{ $act->created_at->format('d/m/Y H:i') }}</td>
+                        <td class="text-muted" style="font-size:0.82rem" data-order="{{ $act->created_at->format('Y-m-d H:i') }}">{{ $act->created_at->format('d/m/Y H:i') }}</td>
                         <td class="text-center">
                             <div class="btn-group btn-group-sm">
                                 <a href="{{ route('activities.show', $act) }}" class="btn btn-outline-info" title="Detail"><i class="bi bi-eye"></i></a>
@@ -69,7 +69,6 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
-    $('.datatables').DataTable().destroy();
     $('.datatables').DataTable({
         order: [[6, 'desc']],
         pageLength: 10,

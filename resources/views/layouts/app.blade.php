@@ -133,22 +133,6 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-    $(document).ready(function() {
-        $('.datatables').DataTable({
-            pageLength: 10,
-            lengthChange: false,
-            language: {
-                search: "Cari:",
-                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
-                infoEmpty: "Tidak ada data",
-                infoFiltered: "(disaring dari _MAX_ total data)",
-                zeroRecords: "Tidak ada data yang cocok",
-                paginate: { previous: "&laquo;", next: "&raquo;" }
-            }
-        });
-    });
-    </script>
     @stack('scripts')
 </body>
 </html>
