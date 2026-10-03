@@ -23,6 +23,7 @@ Route::middleware('web.auth')->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
     Route::patch('/users/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggle-status');
 
+    Route::get('/activities/export', [ActivityController::class, 'export'])->name('activities.export');
     Route::resource('activities', ActivityController::class)->except(['edit', 'update', 'destroy']);
     Route::get('/activities/{activity}/edit', [ActivityController::class, 'edit'])->name('activities.edit');
     Route::put('/activities/{activity}', [ActivityController::class, 'update'])->name('activities.update');

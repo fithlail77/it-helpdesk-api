@@ -2,10 +2,67 @@
 @section('title', 'Semua Tiket')
 
 @section('content')
+<div class="card card-modern shadow-sm mb-3">
+    <div class="card-body py-3">
+        <form method="GET" action="{{ route('activities.index') }}" id="filterForm">
+            <div class="row g-2 align-items-end">
+                <div class="col-sm-6 col-md-3">
+                    <label class="form-label mb-1" style="font-size:0.8rem;font-weight:600;color:#64748b">DARI TANGGAL</label>
+                    <input type="date" name="date_from" class="form-control form-control-sm" value="{{ $dateFrom }}">
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <label class="form-label mb-1" style="font-size:0.8rem;font-weight:600;color:#64748b">SAMPAI TANGGAL</label>
+                    <input type="date" name="date_to" class="form-control form-control-sm" value="{{ $dateTo }}">
+                </div>
+                <div class="col-sm-6 col-md-2">
+                    <label class="form-label mb-1" style="font-size:0.8rem;font-weight:600;color:#64748b">STATUS</label>
+                    <select name="status" class="form-select form-select-sm">
+                        <option value="">Semua</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Tertunda</option>
+                        <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>Diproses</option>
+                        <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Selesai</option>
+                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 col-md-2">
+                    <label class="form-label mb-1" style="font-size:0.8rem;font-weight:600;color:#64748b">KATEGORI</label>
+                    <select name="category" class="form-select form-select-sm">
+                        <option value="">Semua</option>
+                        <option value="hardware" {{ request('category') == 'hardware' ? 'selected' : '' }}>Hardware</option>
+                        <option value="software" {{ request('category') == 'software' ? 'selected' : '' }}>Software</option>
+                        <option value="network" {{ request('category') == 'network' ? 'selected' : '' }}>Network</option>
+                        <option value="other" {{ request('category') == 'other' ? 'selected' : '' }}>Other</option>
+                    </select>
+                </div>
+                <div class="col-sm-12 col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary btn-sm flex-fill">
+                        <i class="bi bi-funnel me-1"></i>Filter
+                    </button>
+                    <a href="{{ route('activities.index') }}" class="btn btn-outline-secondary btn-sm" title="Reset">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="card card-modern shadow-sm">
     <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <h6 class="mb-0 fw-semibold"><i class="bi bi-clipboard-check me-2"></i>Daftar Tiket</h6>
-        <a href="{{ route('activities.create') }}" class="btn btn-primary btn-modern"><i class="bi bi-plus-lg me-1"></i>Buat Tiket</a>
+        <h6 class="mb-0 fw-semibold">
+            <i class="bi bi-clipboard-check me-2"></i>Daftar Tiket
+            <span class="text-muted fw-normal" style="font-size:0.8rem">
+                ({{ \Carbon\Carbon::parse($dateFrom)->format('d/m/Y') }} – {{ \Carbon\Carbon::parse($dateTo)->format('d/m/Y') }})
+            </span>
+        </h6>
+        <div class="d-flex gap-2">
+            <a href="{{ route('activities.export', request()->query()) }}" class="btn btn-success btn-modern">
+                <i class="bi bi-file-earmark-excel me-1"></i>Export XLSX
+            </a>
+            <a href="{{ route('activities.create') }}" class="btn btn-primary btn-modern">
+                <i class="bi bi-plus-lg me-1"></i>Buat Tiket
+            </a>
+        </div>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -71,7 +128,7 @@
 $(document).ready(function() {
     $('.datatables').DataTable({
         order: [[6, 'desc']],
-        pageLength: 10,
+        pageLength: 25,
         lengthChange: false,
         language: {
             search: "Cari:",
