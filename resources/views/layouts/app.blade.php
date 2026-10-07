@@ -85,6 +85,16 @@
             <a href="{{ route('activities.index') }}" class="nav-link {{ request()->routeIs('activities.*') ? 'active' : '' }}">
                 <i class="bi bi-clipboard-check"></i> Semua Tiket
             </a>
+
+            <div class="nav-section">Keuangan</div>
+            <a href="{{ route('cost-overheads.index') }}" class="nav-link {{ request()->routeIs('cost-overheads.*') ? 'active' : '' }}">
+                <i class="bi bi-cash-stack"></i> Cost Overhead
+            </a>
+
+            <div class="nav-section">Laporan</div>
+            <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}">
+                <i class="bi bi-graph-up-arrow"></i> Dashboard Laporan
+            </a>
         </nav>
     </div>
 

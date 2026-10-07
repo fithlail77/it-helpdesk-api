@@ -7,6 +7,8 @@ use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\ActivityController;
 use App\Http\Controllers\Web\SparepartController;
 use App\Http\Controllers\Web\IpDeviceController;
+use App\Http\Controllers\Web\CostOverheadController;
+use App\Http\Controllers\Web\ReportController;
 
 Route::get('/', fn () => redirect()->route('login'));
 
@@ -35,6 +37,14 @@ Route::middleware('web.auth')->group(function () {
 
     // IP Devices
     Route::resource('ip-devices', IpDeviceController::class)->except(['show']);
+
+    // Cost Overheads
+    Route::get('/cost-overheads/export', [CostOverheadController::class, 'export'])->name('cost-overheads.export');
+    Route::post('/cost-overheads/import', [CostOverheadController::class, 'import'])->name('cost-overheads.import');
+    Route::resource('cost-overheads', CostOverheadController::class)->only(['index', 'create', 'store']);
+
+    // Reports
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
     // Assets lookup
     Route::get('/assets/search', [ActivityController::class, 'searchAssets'])->name('assets.search');
