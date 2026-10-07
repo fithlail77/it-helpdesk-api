@@ -50,12 +50,12 @@
 <div class="row g-3 mb-4">
     @if($reportType === 'tickets')
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card bg-gradient-primary text-white shadow-sm">
+            <div class="card stat-card shadow-sm" style="background:#eff6ff; border-left:4px solid #3b82f6">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-white bg-opacity-20"><i class="bi bi-ticket-perforated"></i></div>
+                        <div class="stat-icon" style="background:#dbeafe"><i class="bi bi-ticket-perforated text-primary"></i></div>
                         <div class="ms-3">
-                            <div class="stat-value">{{ $data['summary']['total_tickets'] }}</div>
+                            <div class="stat-value text-dark">{{ $data['summary']['total_tickets'] }}</div>
                             <div class="stat-label">Total Tiket</div>
                         </div>
                     </div>
@@ -63,12 +63,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card bg-gradient-success text-white shadow-sm">
+            <div class="card stat-card shadow-sm" style="background:#f0fdf4; border-left:4px solid #22c55e">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-white bg-opacity-20"><i class="bi bi-check-circle"></i></div>
+                        <div class="stat-icon" style="background:#dcfce7"><i class="bi bi-check-circle text-success"></i></div>
                         <div class="ms-3">
-                            <div class="stat-value">{{ $data['summary']['completed'] }}</div>
+                            <div class="stat-value text-dark">{{ $data['summary']['completed'] }}</div>
                             <div class="stat-label">Selesai</div>
                         </div>
                     </div>
@@ -76,12 +76,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card bg-gradient-warning text-white shadow-sm">
+            <div class="card stat-card shadow-sm" style="background:#fffbeb; border-left:4px solid #f59e0b">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-white bg-opacity-20"><i class="bi bi-clock-history"></i></div>
+                        <div class="stat-icon" style="background:#fef3c7"><i class="bi bi-clock-history text-warning"></i></div>
                         <div class="ms-3">
-                            <div class="stat-value">{{ $data['summary']['avg_resolution_days'] }} hari</div>
+                            <div class="stat-value text-dark">{{ $data['summary']['avg_resolution_days'] }} hari</div>
                             <div class="stat-label">Avg Resolusi</div>
                         </div>
                     </div>
@@ -89,12 +89,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card bg-gradient-info text-white shadow-sm">
+            <div class="card stat-card shadow-sm" style="background:#f0f9ff; border-left:4px solid #06b6d4">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-white bg-opacity-20"><i class="bi bi-currency-dollar"></i></div>
+                        <div class="stat-icon" style="background:#e0f2fe"><i class="bi bi-currency-dollar text-info"></i></div>
                         <div class="ms-3">
-                            <div class="stat-value">Rp {{ number_format($data['summary']['total_sparepart_cost'], 0, ',', '.') }}</div>
+                            <div class="stat-value text-dark">Rp {{ number_format($data['summary']['total_sparepart_cost'], 0, ',', '.') }}</div>
                             <div class="stat-label">Total Biaya Sparepart</div>
                         </div>
                     </div>
@@ -103,12 +103,12 @@
         </div>
     @else
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card bg-gradient-primary text-white shadow-sm">
+            <div class="card stat-card shadow-sm" style="background:#eff6ff; border-left:4px solid #3b82f6">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-white bg-opacity-20"><i class="bi bi-journal-text"></i></div>
+                        <div class="stat-icon" style="background:#dbeafe"><i class="bi bi-journal-text text-primary"></i></div>
                         <div class="ms-3">
-                            <div class="stat-value">{{ $data['summary']['total_records'] }}</div>
+                            <div class="stat-value text-dark">{{ $data['summary']['total_records'] }}</div>
                             <div class="stat-label">Total Records</div>
                         </div>
                     </div>
@@ -116,12 +116,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card bg-gradient-success text-white shadow-sm">
+            <div class="card stat-card shadow-sm" style="background:#f0fdf4; border-left:4px solid #22c55e">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-white bg-opacity-20"><i class="bi bi-cash-stack"></i></div>
+                        <div class="stat-icon" style="background:#dcfce7"><i class="bi bi-cash-stack text-success"></i></div>
                         <div class="ms-3">
-                            <div class="stat-value">Rp {{ number_format($data['summary']['total_amount'], 0, ',', '.') }}</div>
+                            <div class="stat-value text-dark">Rp {{ number_format($data['summary']['total_amount'], 0, ',', '.') }}</div>
                             <div class="stat-label">Total Amount</div>
                         </div>
                     </div>
@@ -129,12 +129,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card bg-gradient-warning text-white shadow-sm">
+            <div class="card stat-card shadow-sm" style="background:#fffbeb; border-left:4px solid #f59e0b">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-white bg-opacity-20"><i class="bi bi-calculator"></i></div>
+                        <div class="stat-icon" style="background:#fef3c7"><i class="bi bi-calculator text-warning"></i></div>
                         <div class="ms-3">
-                            <div class="stat-value">Rp {{ number_format($data['summary']['avg_amount'], 0, ',', '.') }}</div>
+                            <div class="stat-value text-dark">Rp {{ number_format($data['summary']['avg_amount'], 0, ',', '.') }}</div>
                             <div class="stat-label">Avg per Record</div>
                         </div>
                     </div>
@@ -142,12 +142,12 @@
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
-            <div class="card stat-card bg-gradient-info text-white shadow-sm">
+            <div class="card stat-card shadow-sm" style="background:#f0f9ff; border-left:4px solid #06b6d4">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
-                        <div class="stat-icon bg-white bg-opacity-20"><i class="bi bi-graph-up"></i></div>
+                        <div class="stat-icon" style="background:#e0f2fe"><i class="bi bi-graph-up text-info"></i></div>
                         <div class="ms-3">
-                            <div class="stat-value">{{ count($data['monthly_trend']) }}</div>
+                            <div class="stat-value text-dark">{{ count($data['monthly_trend']) }}</div>
                             <div class="stat-label">Bulan Aktif</div>
                         </div>
                     </div>
@@ -262,44 +262,114 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script>
-const chartData = @json($chartData);
-const colors = ['#3b82f6','#22c55e','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#f97316','#84cc16','#6366f1'];
+// Wait for Chart.js and plugin to load
+function initCharts() {
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js not loaded');
+        return;
+    }
+    // Register datalabels plugin
+    if (typeof ChartDataLabels !== 'undefined') {
+        Chart.register(ChartDataLabels);
+    } else {
+        console.warn('chartjs-plugin-datalabels not loaded');
+    }
 
-function createDoughnut(ctx, data, label) {
-    return new Chart(ctx, {
-        type: 'doughnut',
-        data: { labels: data.labels, datasets: [{ data: data.data, backgroundColor: data.colors || colors, borderWidth: 0, label }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 15 } } }, cutout: '60%' }
-    });
+    const chartData = @json($chartData);
+    console.log('Chart data:', chartData);
+
+    const colors = ['#3b82f6','#22c55e','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#f97316','#84cc16','#6366f1'];
+
+    function safeCreate(fn, ctxId, data, label) {
+        const ctx = document.getElementById(ctxId);
+        if (!ctx) {
+            console.error('Canvas not found:', ctxId);
+            return;
+        }
+        if (!data || !data.labels || !data.labels.length) {
+            console.warn('No data for chart:', ctxId, data);
+            ctx.parentElement.innerHTML = '<div class="text-center text-muted py-4">Tidak ada data</div>';
+            return;
+        }
+        try {
+            return fn(ctx, data, label);
+        } catch (e) {
+            console.error('Chart error:', ctxId, e);
+            ctx.parentElement.innerHTML = '<div class="text-center text-danger py-4">Error: ' + e.message + '</div>';
+        }
+    }
+
+    function createDoughnut(ctx, data, label) {
+        return new Chart(ctx, {
+            type: 'doughnut',
+            data: { labels: data.labels, datasets: [{ data: data.data, backgroundColor: data.colors || colors, borderWidth: 0, label }] },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { 
+                    legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 15 } },
+                    title: { display: true, text: label, font: { size: 14, weight: 'bold' }, padding: { bottom: 10 } },
+                    datalabels: { display: true, color: '#1e293b', font: { size: 11, weight: 'bold' }, formatter: (value) => value }
+                } 
+            }, 
+            cutout: '60%' 
+        });
+    }
+
+    function createBar(ctx, data, label) {
+        return new Chart(ctx, {
+            type: 'bar',
+            data: { labels: data.labels, datasets: [{ label, data: data.data, backgroundColor: '#3b82f6', borderRadius: 4, maxBarThickness: 40 }] },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { 
+                    legend: { display: false },
+                    title: { display: true, text: label, font: { size: 14, weight: 'bold' }, padding: { bottom: 10 } },
+                    datalabels: { display: true, color: '#1e293b', font: { size: 11, weight: 'bold' }, anchor: 'end', align: 'top', formatter: (value) => value.toLocaleString() }
+                }, 
+                scales: { y: { beginAtZero: true, ticks: { font: { size: 11 } } }, x: { ticks: { font: { size: 11 } } } } 
+            }
+        });
+    }
+
+    function createLine(ctx, data, label) {
+        return new Chart(ctx, {
+            type: 'line',
+            data: { labels: data.labels, datasets: [{ label, data: data.data, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6' }] },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { 
+                    legend: { display: false },
+                    title: { display: true, text: label, font: { size: 14, weight: 'bold' }, padding: { bottom: 10 } },
+                    datalabels: { display: true, color: '#1e293b', font: { size: 11, weight: 'bold' }, formatter: (value) => value.toLocaleString() }
+                }, 
+                scales: { y: { beginAtZero: true, ticks: { font: { size: 11 }, callback: (value) => value.toLocaleString() } }, x: { ticks: { font: { size: 11 } } } } 
+            }
+        });
+    }
+
+    @if($reportType === 'tickets')
+    safeCreate(createDoughnut, 'chartStatus', chartData.status, 'Status Tiket');
+    safeCreate(createDoughnut, 'chartPriority', chartData.priority, 'Prioritas Tiket');
+    safeCreate(createDoughnut, 'chartCategory', chartData.category, 'Kategori Tiket');
+    safeCreate(createBar, 'chartTeam', chartData.team, 'Tiket per Tim');
+    @else
+    safeCreate(createLine, 'chartMonthly', chartData.monthly, 'Trend Bulanan');
+    safeCreate(createBar, 'chartGlAccount', chartData.gl_account, 'Top GL Account');
+    safeCreate(createBar, 'chartProfitCenter', chartData.profit_center, 'Profit Center');
+    safeCreate(createBar, 'chartDepartemen', chartData.departemen, 'Departemen');
+    @endif
 }
 
-function createBar(ctx, data, label) {
-    return new Chart(ctx, {
-        type: 'bar',
-        data: { labels: data.labels, datasets: [{ label, data: data.data, backgroundColor: '#3b82f6', borderRadius: 4, maxBarThickness: 40 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { font: { size: 11 } } }, x: { ticks: { font: { size: 11 } } } } }
-    });
+// Execute when DOM ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCharts);
+} else {
+    initCharts();
 }
-
-function createLine(ctx, data, label) {
-    return new Chart(ctx, {
-        type: 'line',
-        data: { labels: data.labels, datasets: [{ label, data: data.data, borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#3b82f6' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { font: { size: 11 } } }, x: { ticks: { font: { size: 11 } } } } }
-    });
-}
-
-@if($reportType === 'tickets')
-createDoughnut(document.getElementById('chartStatus'), chartData.status, 'Status');
-createDoughnut(document.getElementById('chartPriority'), chartData.priority, 'Prioritas');
-createDoughnut(document.getElementById('chartCategory'), chartData.category, 'Kategori');
-createBar(document.getElementById('chartTeam'), chartData.team, 'Tiket per Tim');
-@else
-createLine(document.getElementById('chartMonthly'), chartData.monthly, 'Trend Bulanan');
-createBar(document.getElementById('chartGlAccount'), chartData.gl_account, 'Total Amount');
-createBar(document.getElementById('chartProfitCenter'), chartData.profit_center, 'Total Amount');
-createBar(document.getElementById('chartDepartemen'), chartData.departemen, 'Total Amount');
-@endif
 </script>
 @endpush

@@ -7,8 +7,8 @@ use App\Models\Activity;
 use App\Models\ActivityLog;
 use App\Models\CostOverhead;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use OpenAI;
 
 class ReportController extends Controller
 {
@@ -193,20 +193,20 @@ class ReportController extends Controller
     {
         return [
             'monthly' => [
-                'labels' => array_keys($data['monthly_trend']),
-                'data' => array_map(fn($v) => $v['total'], $data['monthly_trend']),
+                'labels' => array_values(array_keys($data['monthly_trend'])),
+                'data' => array_values(array_map(fn($v) => $v['total'] ?? 0, $data['monthly_trend'])),
             ],
             'gl_account' => [
-                'labels' => array_map(fn($v) => $v['gl_name'] ?? 'N/A', $data['by_gl_account']),
-                'data' => array_map(fn($v) => $v['total'], $data['by_gl_account']),
+                'labels' => array_values(array_map(fn($v) => $v['gl_name'] ?? 'N/A', $data['by_gl_account'])),
+                'data' => array_values(array_map(fn($v) => $v['total'] ?? 0, $data['by_gl_account'])),
             ],
             'profit_center' => [
-                'labels' => array_keys($data['by_profit_center']),
-                'data' => array_map(fn($v) => $v['total'], $data['by_profit_center']),
+                'labels' => array_values(array_keys($data['by_profit_center'])),
+                'data' => array_values(array_map(fn($v) => $v['total'] ?? 0, $data['by_profit_center'])),
             ],
             'departemen' => [
-                'labels' => array_keys($data['by_departemen']),
-                'data' => array_map(fn($v) => $v['total'], $data['by_departemen']),
+                'labels' => array_values(array_keys($data['by_departemen'])),
+                'data' => array_values(array_map(fn($v) => $v['total'] ?? 0, $data['by_departemen'])),
             ],
         ];
     }
@@ -216,37 +216,83 @@ class ReportController extends Controller
         $prompt = $this->buildPrompt($type, $data, $dateFrom, $dateTo);
 
         try {
-            $apiUrl = rtrim(env('AI_API_URL', 'https://9router.fithlail.my.id/v1'), '/');
-            $apiKey = env('AI_API_KEY', 'sk-d3a40b875db690e2-2zrwlr-1957b2d7');
-            $model = env('AI_MODEL', 'gpt-4o-mini');
+            $apiUrl  = rtrim(env('AI_API_URL', 'https://9router.fithlail.my.id/v1'), '/');
+            $apiKey  = env('AI_API_KEY', '');
+            $model   = env('AI_MODEL', 'seljuksai-coding');
 
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Content-Type' => 'application/json',
-            ])->withoutVerifying() // Disable SSL verify for development
-              ->timeout(30)->post($apiUrl . '/chat/completions', [
-                'model' => $model,
-                'messages' => [
+            $client = OpenAI::factory()
+                ->withApiKey($apiKey)
+                ->withBaseUri($apiUrl)
+                ->withHttpClient(new \GuzzleHttp\Client([
+                    'verify'          => false,
+                    'connect_timeout' => 5,
+                    'timeout'         => 30,
+                ]))
+                ->make();
+
+            $response = $client->chat()->create([
+                'model'       => $model,
+                'messages'    => [
                     ['role' => 'system', 'content' => 'Anda adalah analis data IT Helpdesk dan Keuangan. Berikan analisis singkat, actionable, dan insight dalam bahasa Indonesia. Fokus pada tren, anomali, dan rekomendasi. Maksimal 3 paragraf.'],
-                    ['role' => 'user', 'content' => $prompt],
+                    ['role' => 'user',   'content' => $prompt],
                 ],
                 'temperature' => 0.3,
-                'max_tokens' => 800,
+                'max_tokens'  => 600,
+                'stream'      => false,
             ]);
 
-            if ($response->successful()) {
-                $content = $response->json('choices.0.message.content');
-                if ($content) {
-                    return $content;
-                }
-            } else {
-                \Log::warning('AI Analysis API error: ' . $response->status() . ' - ' . $response->body());
+            $content = $response->choices[0]->message->content ?? null;
+            if ($content) {
+                return $content;
             }
+
         } catch (\Exception $e) {
-            \Log::error('AI Analysis failed: ' . $e->getMessage());
+            Log::warning('AI Analysis failed: ' . $e->getMessage());
         }
 
-        return 'Gagal mendapatkan analisis AI. Silakan coba lagi nanti.';
+        return $this->getLocalAnalysis($type, $data, $dateFrom, $dateTo);
+    }
+
+    private function getLocalAnalysis(string $type, array $data, string $dateFrom, string $dateTo): string
+    {
+        if ($type === 'tickets') {
+            $s = $data['summary'];
+            $total = $s['total_tickets'];
+            $completed = $s['completed'];
+            $rate = $total > 0 ? round(($completed / $total) * 100, 1) : 0;
+            $topCat = !empty($data['by_category']) ? array_keys($data['by_category'])[0] : '-';
+            $topPriority = !empty($data['by_priority']) ? array_keys($data['by_priority'])[0] : '-';
+            
+            return "**Insight (Local Fallback)**:\n" .
+                "• Periode {$dateFrom} s/d {$dateTo}: {$total} tiket, {$rate}% selesai.\n" .
+                "• Kategori terbanyak: **{$topCat}**. Prioritas dominan: **{$topPriority}**.\n" .
+                "• Rata-rata resolusi: {$s['avg_resolution_days']} hari. Biaya sparepart: Rp " . number_format($s['total_sparepart_cost'], 0, ',', '.') . ".\n\n" .
+                "**Area Perhatian**:\n" .
+                ($s['pending'] > $total * 0.3 ? "• Tiket tertunda tinggi ({$s['pending']}). Perlu alokasi teknisi.\n" : "") .
+                ($s['avg_resolution_days'] > 3 ? "• Resolusi lambat (>3 hari). Evaluasi SLA.\n" : "") .
+                "\n**Rekomendasi**:\n" .
+                "1. Fokus penyelesaian tiket tertunda tertua.\n" .
+                "2. Monitoring SLA harian untuk kategori {$topCat}.\n" .
+                "3. Persiapkan sparepart untuk prioritas {$topPriority}.";
+        }
+
+        $s = $data['summary'];
+        $total = $s['total_amount'];
+        $count = $s['total_records'];
+        $topGl = !empty($data['by_gl_account']) ? array_keys($data['by_gl_account'])[0] : '-';
+        $topDept = !empty($data['by_departemen']) ? array_keys($data['by_departemen'])[0] : '-';
+        
+        return "**Insight (Local Fallback)**:\n" .
+            "• Periode {$dateFrom} s/d {$dateTo}: {$count} records, Total Rp " . number_format($total, 0, ',', '.') . ".\n" .
+            "• GL Account terbesar: **{$topGl}** (Rp " . number_format($data['by_gl_account'][$topGl]['total'] ?? 0, 0, ',', '.') . ").\n" .
+            "• Departemen tertinggi: **{$topDept}**.\n\n" .
+            "**Area Perhatian**:\n" .
+            "• Spike biaya pada GL {$topGl} — cek apakah sesuai budget.\n" .
+            "• Departemen {$topDept} dominan — evaluasi kebutuhan vs realisasi.\n\n" .
+            "**Rekomendasi**:\n" .
+            "1. Review budget GL {$topGl} untuk bulan depan.\n" .
+            "2. Sinkronkan dengan departemen {$topDept} untuk pengendalian.\n" .
+            "3. Aktifkan approval untuk amount > Rp 10jt.";
     }
 
     private function buildPrompt(string $type, array $data, string $dateFrom, string $dateTo): string
