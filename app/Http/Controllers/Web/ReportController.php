@@ -215,41 +215,57 @@ class ReportController extends Controller
     {
         $prompt = $this->buildPrompt($type, $data, $dateFrom, $dateTo);
 
-        try {
-            $apiUrl  = rtrim(env('AI_API_URL', 'https://9router.fithlail.my.id/v1'), '/');
-            $apiKey  = env('AI_API_KEY', '');
-            $model   = env('AI_MODEL', 'seljuksai-coding');
+        $maxRetries = 3;
+        $baseDelay = 2; // seconds
 
-            $client = OpenAI::factory()
-                ->withApiKey($apiKey)
-                ->withBaseUri($apiUrl)
-                ->withHttpClient(new \GuzzleHttp\Client([
-                    'verify'          => false,
-                    'connect_timeout' => 5,
-                    'timeout'         => 30,
-                ]))
-                ->make();
+        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+            try {
+                $apiUrl  = rtrim(env('AI_API_URL', 'https://9router.fithlail.my.id/v1'), '/');
+                $apiKey  = env('AI_API_KEY', '');
+                $model   = env('AI_MODEL', 'seljuksai-coding');
 
-            $response = $client->chat()->create([
-                'model'       => $model,
-                'messages'    => [
-                    ['role' => 'system', 'content' => 'Anda adalah analis data IT Helpdesk dan Keuangan. Berikan analisis singkat, actionable, dan insight dalam bahasa Indonesia. Fokus pada tren, anomali, dan rekomendasi. Maksimal 3 paragraf.'],
-                    ['role' => 'user',   'content' => $prompt],
-                ],
-                'temperature' => 0.3,
-                'max_tokens'  => 600,
-                'stream'      => false,
-            ]);
+                $client = OpenAI::factory()
+                    ->withApiKey($apiKey)
+                    ->withBaseUri($apiUrl)
+                    ->withHttpClient(new \GuzzleHttp\Client([
+                        'verify'           => false,
+                        'connect_timeout'  => 15,
+                        'timeout'          => 120,
+                    ]))
+                    ->make();
 
-            $content = $response->choices[0]->message->content ?? null;
-            if ($content) {
-                return $content;
+                $response = $client->chat()->create([
+                    'model'       => $model,
+                    'messages'    => [
+                        ['role' => 'system', 'content' => 'Anda adalah analis data IT Helpdesk dan Keuangan. Berikan analisis singkat, actionable, dan insight dalam bahasa Indonesia. Fokus pada tren, anomali, dan rekomendasi. Maksimal 3 paragraf.'],
+                        ['role' => 'user',   'content' => $prompt],
+                    ],
+                    'temperature' => 0.3,
+                    'max_tokens'  => 600,
+                    'stream'      => false,
+                ]);
+
+                $content = $response->choices[0]->message->content ?? null;
+                if ($content) {
+                    return $content;
+                }
+
+            } catch (\GuzzleHttp\Exception\ConnectException $e) {
+                Log::warning("AI Analysis connection failed (attempt {$attempt}/{$maxRetries}): " . $e->getMessage());
+            } catch (\GuzzleHttp\Exception\RequestException $e) {
+                Log::warning("AI Analysis request failed (attempt {$attempt}/{$maxRetries}): " . $e->getMessage());
+            } catch (\Exception $e) {
+                Log::warning("AI Analysis failed (attempt {$attempt}/{$maxRetries}): " . $e->getMessage());
             }
 
-        } catch (\Exception $e) {
-            Log::warning('AI Analysis failed: ' . $e->getMessage());
+            if ($attempt < $maxRetries) {
+                $delay = $baseDelay * pow(2, $attempt - 1); // exponential backoff: 2s, 4s, 8s
+                Log::info("AI Analysis retrying in {$delay}s... (attempt " . ($attempt + 1) . "/{$maxRetries})");
+                sleep($delay);
+            }
         }
 
+        Log::error('AI Analysis failed after all retries, using local fallback');
         return $this->getLocalAnalysis($type, $data, $dateFrom, $dateTo);
     }
 
