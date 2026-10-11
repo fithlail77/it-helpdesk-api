@@ -357,12 +357,12 @@ function initCharts() {
     safeCreate(createDoughnut, 'chartPriority', chartData.priority, 'Prioritas Tiket');
     safeCreate(createDoughnut, 'chartCategory', chartData.category, 'Kategori Tiket');
     safeCreate(createBar, 'chartTeam', chartData.team, 'Tiket per Tim');
-    @else
-    safeCreate(createLine, 'chartMonthly', chartData.monthly, 'Trend Bulanan');
+@else
+    safeCreate(createBar, 'chartMonthly', chartData.monthly, 'Trend Bulanan');
     safeCreate(createBar, 'chartGlAccount', chartData.gl_account, 'Top GL Account');
     safeCreate(createBar, 'chartProfitCenter', chartData.profit_center, 'Profit Center');
     safeCreate(createBar, 'chartDepartemen', chartData.departemen, 'Departemen');
-    @endif
+@endif
 }
 
 // Execute when DOM ready
